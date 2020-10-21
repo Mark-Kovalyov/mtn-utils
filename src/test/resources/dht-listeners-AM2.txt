@@ -1,0 +1,42 @@
+2020-06-09 21:58:01 [INFO ] 102 : dhtlisteners.AM2 Started A-Mule/4672 listener, threadId = 102
+2020-06-09 22:11:03 [WARN ] 102 : dhtlisteners.AM2 !
+the8472.bencode.Tokenizer$BDecodingException: unexpected character 0x48 at offset 0
+	at the8472.bencode.Tokenizer.tokenize(Tokenizer.java:278) ~[bt-dht-1.9.jar!/:1.9]
+	at the8472.bencode.BDecoder.decodeInternal(BDecoder.java:151) ~[bt-dht-1.9.jar!/:1.9]
+	at the8472.bencode.BDecoder.decode(BDecoder.java:128) ~[bt-dht-1.9.jar!/:1.9]
+	at mayton.network.dhtobserver.DhtListener.decodeCommand(DhtListener.java:89) [classes!/:?]
+	at mayton.network.dhtobserver.DhtListener.run(DhtListener.java:71) [classes!/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:834) [?:?]
+2020-06-09 22:11:03 [WARN ] 102 : dhtlisteners.AM2 Unable to parse datagram: 
+00000000 : 48 F7 96 EB 8A 87 B3 1B 9F F7 61 6F CC 85 06 25 64  : H         ao   %d
+00000010 : BE 3C 2E 8D 79 E4 7B 79 D2 2F 2D AD 85 B3 8E F7 28  :  <. y {y /-     (
+00000020 : A3 6C F8 EC FC 8A F4 89                             :  l      
+, with atomashpolsky::BEDecoder length = 320
+2020-06-09 22:11:03 [INFO ] 102 : dhtlisteners.AM2 Trying to use atomashpolsky::BEParser
+2020-06-09 22:11:03 [WARN ] 102 : dhtlisteners.AM2 !
+java.lang.IllegalStateException: Invalid type prefix: H
+	at bt.bencoding.BEParser.getTypeForPrefix(BEParser.java:132) ~[bt-bencoding-1.9.jar!/:1.9]
+	at bt.bencoding.BEParser.<init>(BEParser.java:87) ~[bt-bencoding-1.9.jar!/:1.9]
+	at mayton.network.dhtobserver.DhtListener.decodeCommand(DhtListener.java:104) [classes!/:?]
+	at mayton.network.dhtobserver.DhtListener.run(DhtListener.java:71) [classes!/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:834) [?:?]
+2020-06-09 22:11:03 [WARN ] 102 : dhtlisteners.AM2 Unable to parse datagram: 
+00000000 : 48 F7 96 EB 8A 87 B3 1B 9F F7 61 6F CC 85 06 25 64  : H         ao   %d
+00000010 : BE 3C 2E 8D 79 E4 7B 79 D2 2F 2D AD 85 B3 8E F7 28  :  <. y {y /-     (
+00000020 : A3 6C F8 EC FC 8A F4 89                             :  l      
+, with atomashpolsky::BEParser
+2020-06-09 22:11:03 [INFO ] 102 : dhtlisteners.AM2 Trying to use soulway::BeeCoder
+2020-06-09 22:11:03 [WARN ] 102 : dhtlisteners.AM2 !
+java.io.IOException: Object value contains unexpected character - H Bytes left 319
+	at com.github.soulaway.beecoder.BeeCoder$Utils.decodeObject(BeeCoder.java:207) ~[beecoder-1.0.jar!/:?]
+	at com.github.soulaway.beecoder.BeeCoder.decodeStream(BeeCoder.java:79) ~[beecoder-1.0.jar!/:?]
+	at mayton.network.dhtobserver.DhtListener.decodeCommand(DhtListener.java:113) [classes!/:?]
+	at mayton.network.dhtobserver.DhtListener.run(DhtListener.java:71) [classes!/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:834) [?:?]
+2020-06-09 22:11:03 [ERROR] 102 : dhtlisteners.AM2 Unable to parse with soulway::BeeCoder
