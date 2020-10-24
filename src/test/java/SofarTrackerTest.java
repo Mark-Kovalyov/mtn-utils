@@ -1,16 +1,22 @@
 import mayton.lib.SofarTracker;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 public class SofarTrackerTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createUnitLikeTrackerWithNegativeArg() {
-        SofarTracker sofarTracker = SofarTracker.createUnitLikeTracker("", -1);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            SofarTracker sofarTracker = SofarTracker.createUnitLikeTracker("", -1);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createFileSizeTrackerWithNegativeArg() {
-        SofarTracker sofarTracker = SofarTracker.createFileSizeTracker(-1);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            SofarTracker sofarTracker = SofarTracker.createFileSizeTracker(-1);
+        });
     }
 
 }
