@@ -12,14 +12,6 @@ public class LogParserTest {
 
     @Test
     @Disabled
-    public void testEmptyStream() {
-        LogParser logParser = new LogParser(new File("/dev/null"), "\\d+");
-        Iterator<LogMessage> iterator = logParser.iterator();
-        assertFalse(iterator.hasNext());
-    }
-
-    @Test
-    @Disabled
     public void test() {
         //LogParser logParser = new LogParser(new File("src/test/resources/dht-listeners-AM2.txt"), "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} ");
         LogParser logParser = new LogParser(new File("src/test/resources/dht-listeners-AM2.txt"), "^\\d{4}.+");

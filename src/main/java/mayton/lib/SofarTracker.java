@@ -41,6 +41,8 @@ public class SofarTracker {
 
     private UnitTypes unitType;
 
+    private boolean finished;
+
     public static SofarTracker createUnitLikeTracker(String units, long size) {
         return new SofarTracker(units, size, UnitTypes.UNITS);
     }
@@ -61,6 +63,9 @@ public class SofarTracker {
     }
 
     public void update(long position) {
+        if (finished == true) {
+            throw new IllegalStateException("Unable to update! SofarTracker is finished!");
+        }
         if (position < 0 || position > this.size) {
             throw new IllegalArgumentException(format("Argument was %d but expected in interval [0..size]", position));
         }
@@ -72,11 +77,29 @@ public class SofarTracker {
         if (position == 0) {
             return Optional.empty();
         }
-        return Optional.of((long)((double)size * (currentTime - startTime) / position) + startTime);
+        return Optional.of((long) ((double) size * (currentTime - startTime) / position) + startTime);
     }
 
-    private int percent() {
+    private int calculatePercent() {
         return (int) (100L * position / size);
+    }
+
+    private String formatUnitsSpeed() {
+        long deltaTimeSec = (currentTime - startTime) / 1000;
+        if (deltaTimeSec == 0) {
+            return "?";
+        } else {
+            return String.format("%d %s(s)/sec", position / deltaTimeSec, units);
+        }
+    }
+
+    private String formatFileSizeSpeed() {
+        long deltaTimeSec = (currentTime - startTime) / 1000;
+        if (deltaTimeSec == 0) {
+            return "?";
+        } else {
+            return String.format("%s/sec", byteCountToDisplaySize(position / deltaTimeSec));
+        }
     }
 
     private String formatEstimatedEndTime() {
@@ -91,25 +114,46 @@ public class SofarTracker {
 
     @Override
     public String toString() {
-        if (this.unitType == UnitTypes.BYTES) {
-            return format("Processed %s of %s. [ %d%% ] Time elapsed: %s, Time remain: %s, Will end at %s",
-                    byteCountToDisplaySize(position),
-                    byteCountToDisplaySize(size),
-                    percent(),
-                    formatElapsedTime(),
-                    formatTimeRemains(),
-                    formatEstimatedEndTime()
-            );
+        if (finished) {
+            if (this.unitType == UnitTypes.BYTES) {
+                return format("Done! Processed %s of %s. [ %d%% ] Time elapsed: %s",
+                        byteCountToDisplaySize(position),
+                        byteCountToDisplaySize(size),
+                        calculatePercent(),
+                        formatElapsedTime()
+                );
+            } else {
+                return format("Done! Processed %d of %d %s(s). [ %d%% ] Time elapsed: %s",
+                        position,
+                        size,
+                        units,
+                        calculatePercent(),
+                        formatElapsedTime()
+                );
+            }
         } else {
-            return format("Processed %d of %d %s(s). [ %d%% ] Time elapsed: %s, Time remain: %s, Will end at %s",
-                    position,
-                    size,
-                    units,
-                    percent(),
-                    formatElapsedTime(),
-                    formatTimeRemains(),
-                    formatEstimatedEndTime()
-            );
+            if (this.unitType == UnitTypes.BYTES) {
+                return format("Processed %s of %s. [ %d%% ] with avg speed: %s. Time elapsed: %s, Time remain: %s, Will end at %s",
+                        byteCountToDisplaySize(position),
+                        byteCountToDisplaySize(size),
+                        calculatePercent(),
+                        formatFileSizeSpeed(),
+                        formatElapsedTime(),
+                        formatTimeRemains(),
+                        formatEstimatedEndTime()
+                );
+            } else {
+                return format("Processed %d of %d %s(s). [ %d%% ] with avg speed: %s. Time elapsed: %s, Time remain: %s, Will end at %s",
+                        position,
+                        size,
+                        units,
+                        calculatePercent(),
+                        formatUnitsSpeed(),
+                        formatElapsedTime(),
+                        formatTimeRemains(),
+                        formatEstimatedEndTime()
+                );
+            }
         }
     }
 
@@ -131,6 +175,11 @@ public class SofarTracker {
                 ofEpochMilli(currentTime)).toMillis(),
                 INTERVAL_TIME_FORMAT,
                 true);
+    }
+
+    public void finish() {
+        finished = true;
+        position = size;
     }
 
 }
