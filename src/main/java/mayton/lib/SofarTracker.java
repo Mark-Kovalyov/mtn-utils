@@ -63,7 +63,7 @@ public class SofarTracker {
     }
 
     public void update(long position) {
-        if (finished == true) {
+        if (finished) {
             throw new IllegalStateException("Unable to update! SofarTracker is finished!");
         }
         if (position < 0 || position > this.size) {
