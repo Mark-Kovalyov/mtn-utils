@@ -12,13 +12,14 @@ import java.util.Properties;
  * based on properties, system props, and environment variables.<br>
  *
  * The route is:<br>
- * <ol>1)Lookup in application config</ol>
- * <ol>2)Or else lookup in Java system props</ol>
- * <ol>3) Or else lookup in OS env</ol>
+ * <ol>1) Lookup in command line</ol>
+ * <ol>2) Lookup in application config</ol>
+ * <ol>3) Or else lookup in Java system props</ol>
+ * <ol>4) Or else lookup in OS env</ol>
  *
  * Agreements are:<br>
  * <pre>
- * Command line argument    :   --baseConfigPath
+ * Command line argument    :   --base-config-path
  * Application property name:   baseConfigPath
  * Java system property name:   baseConfigPath
  * OS env name              :   BASE_CONFIG_PATH
@@ -35,6 +36,12 @@ public class Uniconf {
         properties.load(new FileInputStream(applicationConfig));
     }
 
+    public Uniconf(String[] commandLine, String applicationConfig) throws IOException {
+        this.commandLine = commandLine;
+        properties = new Properties();
+        properties.load(new FileInputStream(applicationConfig));
+    }
+
     public Uniconf() {
     }
 
@@ -42,16 +49,17 @@ public class Uniconf {
         return lookupProperty(key).orElse(defaultValue);
     }
 
-    public Optional<String> lookupProperty(String key) {
-        Validate.notBlank(key, "The lookupProperty accepts only non blank keys!");
-        String lower = key.toLowerCase();
-        String upper = key.toUpperCase();
+    public Optional<String> lookupProperty(String keyInCamelFormat) {
+        Validate.notBlank(keyInCamelFormat, "The lookupProperty accepts only non blank keys!");
+        String lower = keyInCamelFormat.toLowerCase();
+        String keyInDashFormat = CamelUtils.camelToDash(keyInCamelFormat);
+        // assumed command line argument looks like --base-config-path
         if (properties != null && properties.contains(lower)) {
             return Optional.of(properties.getProperty(lower)); // baseConfigPath=
         } else if (System.getProperty(lower) != null){
             return Optional.of(System.getProperty(lower)); // baseConfigPath=
-        } else if (System.getenv(upper) != null){
-            return Optional.of(System.getenv(upper)); // BASE_CONFIG_PATH=
+        } else if (System.getenv(keyInDashFormat) != null){
+            return Optional.of(System.getenv(keyInDashFormat)); // BASE_CONFIG_PATH=
         } else {
             return Optional.empty();
         }
