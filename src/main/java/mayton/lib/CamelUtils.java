@@ -29,12 +29,16 @@ public class CamelUtils {
     public static String camelToDash(String s) {
         StringBuilder sb = new StringBuilder(s.length());
         for(char c : s.toCharArray()) {
+            if (c == '.') {
+                sb.append("_");
+                continue;
+            }
             if (Character.isUpperCase(c)) {
                 sb.append("_");
             }
             sb.append(Character.toUpperCase(c));
         }
-        return sb.toString();
+        return StringUtils.replace(sb.toString(), "__", "_");
     }
 
     public static String commandLineToDash(String s) {
