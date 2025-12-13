@@ -8,6 +8,10 @@ public class ConsoleUtils {
         System.out.println(s);
     }
 
+    public static void print(String s) {
+        System.out.print(s);
+    }
+
     public static PrintStream printf(String format, Object ...args) {
         return System.out.printf(format, args);
     }

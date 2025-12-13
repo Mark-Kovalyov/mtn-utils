@@ -2,9 +2,20 @@ package mayton.lib;
 
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UniconfTest {
+
+    @Test
+    void test2() throws IOException {
+        PrintWriter pw = new PrintWriter(new File("x"), StandardCharsets.UTF_8);
+    }
 
     @Test
     void test() {
